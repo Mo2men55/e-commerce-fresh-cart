@@ -9,12 +9,13 @@ import {
   MinusIcon,
   PlusIcon,
   ShareIcon,
-  ShoppingCartIcon,
   ShieldCheckIcon,
   TruckIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline"
 import { prodType } from "@/app/_interface/product"
+import ButtonAddCart from "@/app/_component/ButtonAddCart/ButtonAddCart"
+
 
 export default function ProductDetails({ product }: { product: prodType }) {
   const images = [product.imageCover, ...(product.images ?? [])].filter((image, index, list) => list.indexOf(image) === index)
@@ -71,7 +72,8 @@ export default function ProductDetails({ product }: { product: prodType }) {
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <button type="button" className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 py-4 font-semibold text-white hover:bg-emerald-700"><ShoppingCartIcon className="size-5" />Add to Cart</button>
+              <ButtonAddCart Home={false} ProdId={product._id} />
+              
               <button type="button" className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-4 font-semibold text-white hover:bg-slate-800"><BoltIcon className="size-5" />Buy Now</button>
             </div>
             <div className="mt-4 flex gap-3">

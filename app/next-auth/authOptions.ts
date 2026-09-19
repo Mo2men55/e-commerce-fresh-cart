@@ -4,7 +4,10 @@ import { jwtDecode } from "jwt-decode";
 import { JWT } from "next-auth/jwt";
 
 export const authOption: NextAuthOptions = {
-  // Configure one or more authentication providers
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     Credentials({
       name: "my-login",
@@ -74,6 +77,6 @@ export const authOption: NextAuthOptions = {
   },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/LogIn",
   },
 };

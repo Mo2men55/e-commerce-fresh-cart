@@ -1,40 +1,56 @@
 import { getToken } from "next-auth/jwt";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+const pathProtected = [
+  "/cart",
+  "/checkout",
+  "/profile",
+  "/orders",
+  "/wishlist",
+  "/address",
+];
+
+const pathUnprotected = ["/login", "/signup", "/forgetpass"];
 
 export async function proxy(req: NextRequest) {
-  const pathProtected = [
-    "/cart",
-    "/checkout",
-    "/profile",
-    "/orders",
-    "/wishlist",
-    "/address",
-    "api/v1/auth/signout",
-    "/api/v1/auth/signin",
-    "/api/v1/auth/signup",
-  ];
-  const psthunprotected = ["/Login", "/SignUp", "/forgetpass"];
   const token = await getToken({
-    req: req,
+    req,
     secret: process.env.NEXTAUTH_SECRET,
-    secureCookie: process.env.NODE_ENV == "production",
   });
-  const accessToken = token?.token;
+  const isAuthenticated = Boolean(token);
+  const pathname = req.nextUrl.pathname.toLowerCase();
 
   if (
-    pathProtected.some((path) => req.nextUrl.pathname.startsWith(path)) &&
-    !accessToken
+    pathProtected.some((path) => pathname.startsWith(path)) &&
+    !isAuthenticated
   ) {
     const url = req.nextUrl.clone();
-    url.pathname = "/Login";
-    return Response.redirect(url);
+    url.pathname = "/LogIn";
+    return NextResponse.redirect(url);
   }
+
   if (
-    psthunprotected.some((path) => req.nextUrl.pathname.startsWith(path)) &&
-    accessToken
+    pathUnprotected.some((path) => pathname.startsWith(path)) &&
+    isAuthenticated
   ) {
     const url = req.nextUrl.clone();
     url.pathname = "/";
-    return Response.redirect(url);
+    return NextResponse.redirect(url);
   }
+
+  return NextResponse.next();
 }
+
+export const config = {
+  matcher: [
+    "/cart/:path*",
+    "/checkout/:path*",
+    "/profile/:path*",
+    "/orders/:path*",
+    "/wishlist/:path*",
+    "/address/:path*",
+    "/LogIn",
+    "/SignUp",
+    "/forgetPass",
+  ],
+};

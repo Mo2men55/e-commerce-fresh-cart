@@ -1,7 +1,13 @@
+"use client"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowPathIcon, EyeIcon, HeartIcon, PlusIcon } from "@heroicons/react/24/outline"
+import { ArrowPathIcon, EyeIcon, HeartIcon} from "@heroicons/react/24/outline"
 import { prodType } from "@/app/_interface/product"
+import ButtonAddCart from "../ButtonAddCart/ButtonAddCart"
+
+
+
+
 
 function ProductCard({ product }: { product: prodType }) {
   const discount = product.priceAfterDiscount
@@ -28,7 +34,8 @@ function ProductCard({ product }: { product: prodType }) {
         <div className="mt-2 flex items-center gap-2"><span className="text-lg tracking-wide text-amber-400">{"★".repeat(rating)}{"☆".repeat(5 - rating)}</span><span className="text-xs text-slate-500">{product.ratingsAverage} ({product.ratingsQuantity})</span></div>
         <div className="mt-auto flex items-center justify-between pt-4">
           <div className="flex items-baseline gap-2"><span className="text-lg font-bold text-slate-800">{product.priceAfterDiscount ?? product.price} EGP</span>{discount > 0 && <del className="text-xs text-slate-400">{product.price} EGP</del>}</div>
-          <button type="button" aria-label={`Add ${product.title} to cart`} className="flex size-10 items-center justify-center rounded-full bg-emerald-600 text-white hover:bg-emerald-700"><PlusIcon className="size-5" /></button>
+          <ButtonAddCart Home={true} ProdId={product._id} />
+          {/* <button type="button" aria-label={`Add ${product.title} to cart`} className="flex size-10 items-center justify-center rounded-full bg-emerald-600 text-white hover:bg-emerald-700"><PlusIcon className="size-5" /></button> */}
         </div>
       </div>
     </article>

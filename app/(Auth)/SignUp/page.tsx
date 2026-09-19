@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signUpUser } from "@/app/_component/action/auth.action";
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/toast";
 
 const signupSchema = z
   .object({
@@ -114,8 +115,18 @@ export default function SignupPage() {
 
     if (result?.message === "success") {
       router.push("/LogIn");
+      toast.add({
+        title: "Account Created",
+        description: "Your account has been created successfully. Please log in to continue.",
+      });
     } else {
-      setApiError(result?.message || "Failed to create account. Please try again.");
+      setApiError(
+        result?.message || "Failed to create account. Please try again.",
+      );
+      toast.add({
+        title: "Error",
+        description: result?.message || "Failed to create account. Please try again."
+      });
     }
   }
 
