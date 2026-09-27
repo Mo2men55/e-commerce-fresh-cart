@@ -4,6 +4,8 @@ import "./globals.css";
 import Nav from "./_component/NavBar/Nav";
 import Footer from "./_component/Footer/Footer";
 import MyProvider from "./_component/MyProvider/MyProvider";
+import Providers from "./_component/TanstackProvider/TanstackProvider";
+import { Toaster } from "@/components/ui/toast";
 
 
 const Exofont = Exo({
@@ -23,11 +25,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${Exofont.className}  h-full antialiased`}
     >
       <body className="min-h-full flex flex-col ">
+        <Providers>
+
         <MyProvider>
         <Nav />
         {children}
+        <Toaster />
         <Footer/>
         </MyProvider>
+        </Providers>
+        
         </body>
     </html>
   );

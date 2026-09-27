@@ -1,9 +1,13 @@
-import React from 'react'
+
+import React from "react";
+import CartComp from "../_component/CartComp/CartComp";
+
 
 export default function page() {
+
   return (
-    <div>
-      
-    </div>
-  )
+    <>
+      <CartComp />
+    </>
+  );
 }
