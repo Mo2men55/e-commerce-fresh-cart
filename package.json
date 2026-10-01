@@ -1,7 +1,8 @@
 {
-  "name": "e-commerce",
+  "name": "e-commerce-fresh-cart",
   "version": "0.1.0",
   "private": true,
+  "description": "E-Commerce (Fresh Cart) — a modern Next.js storefront with product catalog, cart, wishlist, checkout, orders, and authentication",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

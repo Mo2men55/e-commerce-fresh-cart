@@ -14,8 +14,9 @@ const Exofont = Exo({
 });
 
 export const metadata: Metadata = {
-  title: "E-Commerce App",
-  description: "A simple e-commerce application built with Next.js 13 and TypeScript.",
+  title: "E-Commerce (Fresh Cart)",
+  description:
+    "E-Commerce (Fresh Cart) — shop products by category and brand, manage cart and wishlist, check out securely, track orders, and manage your account.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
