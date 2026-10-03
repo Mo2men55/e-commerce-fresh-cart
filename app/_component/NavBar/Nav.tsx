@@ -7,6 +7,7 @@ import {
   EnvelopeIcon,
   GiftIcon,
   HeartIcon,
+  ArrowRightOnRectangleIcon,
   ChatBubbleLeftRightIcon,
   MagnifyingGlassIcon,
   PhoneIcon,
@@ -139,14 +140,6 @@ export default function Nav() {
             className="mx-auto  px-4 sm:px-6 lg:px-8"
           >
             <div className="flex min-h-20 items-center gap-4">
-              <button
-                type="button"
-                onClick={() => setOpen(true)}
-                className="rounded-md p-2 text-slate-500 lg:hidden"
-                aria-label="Open menu"
-              >
-                <Bars3Icon className="size-6" />
-              </button>
               <Link href="/" className="shrink-0">
                 <Image
                   src="/images/freshcart-logo.png"
@@ -284,6 +277,17 @@ export default function Nav() {
                   </>
                 )}
               </div>
+
+              <button
+                type="button"
+                onClick={() => setOpen(true)}
+                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white transition-colors hover:bg-emerald-700 lg:hidden"
+                aria-label="Open menu"
+                aria-expanded={open}
+                aria-controls="mobile-nav-panel"
+              >
+                <Bars3Icon className="size-5" />
+              </button>
             </div>
 
             <form
@@ -311,7 +315,10 @@ export default function Nav() {
           className="relative z-50 lg:hidden"
         >
           <DialogBackdrop className="fixed inset-0 bg-black/30" />
-          <DialogPanel className="fixed inset-y-0 left-0 w-80 max-w-[85%] overflow-y-auto bg-white p-6 shadow-xl">
+          <DialogPanel
+            id="mobile-nav-panel"
+            className="fixed inset-y-0 right-0 w-80 max-w-[85%] overflow-y-auto bg-white p-6 shadow-xl"
+          >
             <div className="mb-8 flex items-center justify-between">
               <span className="text-xl font-bold text-slate-800">
                 FreshCart
@@ -360,26 +367,84 @@ export default function Nav() {
                   </Link>
                 ),
               )}
-               {session.status === "authenticated" ? (
-                  <>
-                    <button
-                      onClick={Logouthandler}
-                      className="hidden items-center gap-2 rounded-full bg-red-600 px-5 py-3 text-sm font-semibold text-white hover:bg-red-700 sm:flex"
-                    >
-                      Log Out
-                    </button>
-                  </>
-                ) : (
-                  <>
+
+              {session.status === "authenticated" ? (
+                <>
+                  <div className="space-y-2 border-t border-slate-100 pt-5">
                     <Link
-                      href="/LogIn"
-                      className="hidden items-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 sm:flex"
+                      href="/wishlist"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-700"
                     >
-                      <UserIcon className="size-4" />
-                       Sign In
+                      <span className="flex size-9 items-center justify-center rounded-full bg-rose-50">
+                        <HeartIcon className="size-5 text-rose-500" />
+                      </span>
+                      <span className="flex-1">Wishlist</span>
+                      <span className="text-xs text-slate-500">
+                        {wishlistdata?.count ?? wishlistdata?.data?.length ?? 0}
+                      </span>
                     </Link>
-                  </>
-                )}    
+                    <Link
+                      href="/cart"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-700"
+                    >
+                      <span className="flex size-9 items-center justify-center rounded-full bg-emerald-50">
+                        <ShoppingCartIcon className="size-5 text-emerald-600" />
+                      </span>
+                      <span className="flex-1">Cart</span>
+                      <span className="text-xs text-slate-500">
+                        {cartdata?.numOfCartItems ?? 0}
+                      </span>
+                    </Link>
+                  </div>
+
+                  <div className="space-y-2 border-t border-slate-100 pt-5">
+                    <Link
+                      href="/profile"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    >
+                      <span className="flex size-9 items-center justify-center rounded-full bg-slate-100">
+                        <IdentificationIcon className="size-5 text-slate-500" />
+                      </span>
+                      {session.data?.user?.name || "My Account"}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpen(false);
+                        Logouthandler();
+                      }}
+                      className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50"
+                    >
+                      <span className="flex size-9 items-center justify-center rounded-full bg-rose-50">
+                        <ArrowRightOnRectangleIcon className="size-5" />
+                      </span>
+                      Sign Out
+                    </button>
+                  </div>
+                </>
+              ) : session.status === "unauthenticated" ? (
+                <div className="space-y-3 border-t border-slate-100 pt-5">
+                  <Link
+                    href="/LogIn"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700"
+                  >
+                    <UserIcon className="size-5" />
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/SignUp"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                  >
+                    <UserPlusIcon className="size-5" />
+                    Sign Up
+                  </Link>
+                </div>
+              ) : null}
             </div>
           </DialogPanel>
         </Dialog>
