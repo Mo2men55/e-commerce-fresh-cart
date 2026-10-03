@@ -5,7 +5,7 @@ import { JWT } from "next-auth/jwt";
 import { API_BASE_URL } from "../_component/Service/apiConfig";
 
 export const authOption: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET ?? "dev-secret-change-me",
   session: {
     strategy: "jwt",
   },
@@ -77,5 +77,6 @@ export const authOption: NextAuthOptions = {
   },
   pages: {
     signIn: "/LogIn",
+    error: "/LogIn",
   },
 };

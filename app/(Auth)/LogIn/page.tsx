@@ -36,6 +36,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState("");
+  const [authError, setAuthError] = useState("");
   const {
     control,
     handleSubmit,
@@ -47,6 +48,17 @@ export default function LoginPage() {
 
   useEffect(() => {
     document.title = "Sign In | FreshCart";
+
+    const queryError = new URLSearchParams(window.location.search).get("error");
+    if (queryError) {
+      const message =
+        queryError === "Configuration"
+          ? "There is a problem with the server configuration. Please contact support."
+          : queryError === "CredentialsSignin"
+            ? "Invalid email or password. Please try again."
+            : "Something went wrong while signing in.";
+      setAuthError(message);
+    }
   }, []);
 
   async function onSubmit(values: LoginFormValues) {
@@ -60,7 +72,11 @@ export default function LoginPage() {
     if (isLogin?.ok) {
       router.push("/");
     } else {
-      setApiError("Invalid email or password. Please try again.");
+      const errorMessage =
+        isLogin?.error === "CredentialsSignin"
+          ? "Invalid email or password. Please try again."
+          : "Something went wrong while signing in. Please try again.";
+      setApiError(errorMessage);
     }
   }
 
@@ -115,6 +131,12 @@ export default function LoginPage() {
             <p className="mt-1 text-sm text-slate-500">
               Sign in to continue your fresh shopping experience
             </p>
+
+            {(apiError || authError) && (
+              <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600">
+                {apiError || authError}
+              </div>
+            )}
 
             <div className="mt-6 space-y-3">
               <Button
