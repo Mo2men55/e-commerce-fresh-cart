@@ -55,7 +55,7 @@ export default function ButtonAddCart({
         description:
           "There was an error adding the product to your cart. Please check you are login.",
       });
-      router.push("/Login");
+      router.push("/LogIn");
     },
   });
   return (
