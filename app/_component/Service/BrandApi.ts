@@ -1,7 +1,8 @@
 import type { Brand } from "@/app/_interface/product";
+import { API_BASE_URL } from "./apiConfig";
 
 export async function getAllBrands(): Promise<Brand[]> {
-  const res = await fetch(`${process.env.BASE_API}/api/v1/brands?limit=50`, {
+  const res = await fetch(`${API_BASE_URL}/api/v1/brands?limit=50`, {
     method: "GET",
   });
 

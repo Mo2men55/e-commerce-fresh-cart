@@ -9,7 +9,6 @@ type Props = {
 export default async function page(props: Props) {
   const params = await props.params;
   const { cartId } = params;
-  console.log(cartId);
 
   return (
     <>

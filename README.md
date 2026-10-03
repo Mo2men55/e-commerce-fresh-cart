@@ -56,6 +56,10 @@ NEXTAUTH_SECRET=your-secret-here
 
 > Generate a secret with: `openssl rand -base64 32`
 
+`BASE_API` is optional and defaults to `https://ecommerce.routemisr.com`, so no API
+environment variable is required on Vercel. Set `BASE_API` only if you want to use
+a different API URL.
+
 ## Project structure
 
 ```

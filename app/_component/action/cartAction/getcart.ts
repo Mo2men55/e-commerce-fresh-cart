@@ -22,9 +22,10 @@ export async function getcart() {
       throw new Error("Failed to add product to cart");
     }
     const payload = await response.json();
-    console.log(payload);
     return payload;
   } catch (error) {
-    console.error("Error adding product to cart:", error);
+    throw error instanceof Error
+      ? error
+      : new Error("Failed to fetch cart");
   }
 }

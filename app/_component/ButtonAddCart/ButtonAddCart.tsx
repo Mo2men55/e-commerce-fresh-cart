@@ -40,8 +40,7 @@ export default function ButtonAddCart({
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: addToCart,
-    onSuccess: (data) => {
-      console.log("data", data);
+    onSuccess: () => {
       toast.add({
         type: "success",
         title: "Success",
@@ -49,8 +48,7 @@ export default function ButtonAddCart({
       });
       queryClient.invalidateQueries({ queryKey: ["getcart"] });
     },
-    onError: (error) => {
-      console.log("error", error);
+    onError: () => {
       toast.add({
         type: "error",
         title: "Failed to add product to cart",

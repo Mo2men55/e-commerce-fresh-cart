@@ -2,6 +2,7 @@ import { NextAuthOptions, Session, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { jwtDecode } from "jwt-decode";
 import { JWT } from "next-auth/jwt";
+import { API_BASE_URL } from "../_component/Service/apiConfig";
 
 export const authOption: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -25,7 +26,7 @@ export const authOption: NextAuthOptions = {
       },
       async authorize(credentials) {
         const response = await fetch(
-          `${process.env.BASE_API}/api/v1/auth/signin`,
+          `${API_BASE_URL}/api/v1/auth/signin`,
           {
             method: "POST",
             headers: {
@@ -56,8 +57,6 @@ export const authOption: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      console.log("JWT callback - token:", token);
-      console.log("JWT callback - user:", user);
       if (user) {
         token.id = user.id;
         token.email = user.email;

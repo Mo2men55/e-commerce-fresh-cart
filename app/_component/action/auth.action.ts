@@ -1,5 +1,7 @@
 "use server"
 
+import { API_BASE_URL } from "../Service/apiConfig";
+
 type SignUpPayload = {
   name: string
   email: string
@@ -11,7 +13,7 @@ type SignUpPayload = {
 export async function signUpUser(values: SignUpPayload) {
   try {
     const response = await fetch(
-      `${process.env.BASE_API}/api/v1/auth/signup`,
+      `${API_BASE_URL}/api/v1/auth/signup`,
       {
         method: "POST",
         headers: {
@@ -22,8 +24,7 @@ export async function signUpUser(values: SignUpPayload) {
     )
     const data = await response.json()
     return data
-  } catch (error) {
-    console.log("Error signing up user:", error)
+  } catch {
     return { message: "Something went wrong. Please try again." }
   }
 }

@@ -1,6 +1,7 @@
 import { prodType } from "@/app/_interface/product";
+import { API_BASE_URL } from "./apiConfig";
 
-const PRODUCTS_URL = `${process.env.BASE_API}/api/v1/products`;
+const PRODUCTS_URL = `${API_BASE_URL}/api/v1/products`;
 
 export type ProductFilters = {
   keyword?: string;
@@ -92,7 +93,7 @@ export async function getAllProducts(): Promise<prodType[]> {
 
 export async function getProductDetails(prodId: string): Promise<prodType> {
   const response = await fetch(
-    `https://ecommerce.routemisr.com/api/v1/products/${prodId}`,
+    `${API_BASE_URL}/api/v1/products/${prodId}`,
   );
 
   if (!response.ok) {
