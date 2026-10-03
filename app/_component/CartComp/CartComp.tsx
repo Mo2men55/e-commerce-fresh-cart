@@ -348,7 +348,7 @@ export default function CartComp() {
                     </details>
 
                     <Link
-                      href="/checkout"
+                      href={`/checkout/${cartdata?.cartId}`}
                       className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3.5 text-sm font-semibold text-white hover:bg-emerald-700"
                     >
                       <LockClosedIcon className="size-4" />

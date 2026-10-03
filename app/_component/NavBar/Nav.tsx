@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   Bars3Icon,
   ChevronDownIcon,
@@ -20,8 +20,10 @@ import {
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { CartResponseType } from "@/app/types/getcart";
+import { WishlistResponseType } from "@/app/types/wishlist";
 import { useQuery } from "@tanstack/react-query";
 
 const navigation = [
@@ -33,17 +35,21 @@ const navigation = [
 
 const categories = [
   { name: "All Categories", href: "/categories" },
-  { name: "Electronics", href: "/products?category=electronics" },
-  { name: "Women's Fashion", href: "/products?category=womens-fashion" },
-  { name: "Men's Fashion", href: "/products?category=mens-fashion" },
-  { name: "Beauty & Health", href: "/products?category=beauty-health" },
+  { name: "Music", href: "/music" },
+  { name: "Men's Fashion", href: "/menfashion" },
+  { name: "Women's Fashion", href: "/womenfashion" },
+  { name: "Super Market", href: "/supermarket" },
+  { name: "Mobiles", href: "/mobile" },
+  { name: "Books", href: "/book" },
+  { name: "Home", href: "/home" },
 ];
 
 export default function Nav() {
   const session = useSession();
-  console.log("session is  :", session);
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { data: cartdata } = useQuery<CartResponseType>({
     queryKey: ["getcart"],
     queryFn: async () => {
@@ -54,8 +60,31 @@ export default function Nav() {
       return response.json();
     },
   });
+  const { data: wishlistdata } = useQuery<WishlistResponseType>({
+    queryKey: ["getwishlist"],
+    queryFn: async () => {
+      const response = await fetch("/api/wishlist");
+      if (!response.ok) {
+        throw new Error("Failed to fetch wishlist");
+      }
+      return response.json();
+    },
+    enabled: session.status === "authenticated",
+  });
+
   function Logouthandler() {
     signOut({ callbackUrl: "/LogIn", redirect: true });
+  }
+
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const keyword = searchQuery.trim();
+    setOpen(false);
+    router.push(
+      keyword
+        ? `/products?keyword=${encodeURIComponent(keyword)}`
+        : "/products",
+    );
   }
 
   return (
@@ -118,30 +147,37 @@ export default function Nav() {
               >
                 <Bars3Icon className="size-6" />
               </button>
-              <Image
-                src="/images/freshcart-logo.png"
-                alt="FreshCart Logo"
-                width={300}
-                height={100}
-                className="h-10 w-auto"
-              />
+              <Link href="/" className="shrink-0">
+                <Image
+                  src="/images/freshcart-logo.png"
+                  alt="FreshCart Logo"
+                  width={300}
+                  height={100}
+                  className="h-10 w-auto"
+                />
+              </Link>
 
               <div className="hidden flex-1 lg:block">
-                <div className="mx-auto flex max-w-xl items-center rounded-full border border-slate-200 bg-slate-50 px-5 py-2">
+                <form
+                  onSubmit={handleSearch}
+                  className="mx-auto flex max-w-xl items-center rounded-full border border-slate-200 bg-slate-50 px-5 py-2"
+                >
                   <input
                     type="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search for products, brands and more..."
                     className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
                     aria-label="Search products"
                   />
                   <button
-                    type="button"
+                    type="submit"
                     className="flex size-9 items-center justify-center rounded-full bg-emerald-600 text-white"
                     aria-label="Search"
                   >
                     <MagnifyingGlassIcon className="size-5" />
                   </button>
-                </div>
+                </form>
               </div>
 
               <div className="hidden items-center gap-7 lg:flex">
@@ -201,8 +237,15 @@ export default function Nav() {
                 {session.status === "authenticated" ? (
                   <>
                     {" "}
-                    <Link href="/wishlist" aria-label="Wishlist">
+                    <Link
+                      href="/wishlist"
+                      className="relative"
+                      aria-label="Wishlist"
+                    >
                       <HeartIcon className="size-6 text-slate-500 hover:text-emerald-600" />
+                      <span className="absolute -right-2 -top-2 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[10px] text-white">
+                        {wishlistdata?.count ?? wishlistdata?.data?.length ?? 0}
+                      </span>
                     </Link>
                     <Link
                       href="/cart"
@@ -243,15 +286,22 @@ export default function Nav() {
               </div>
             </div>
 
-            <div className="mb-4 flex items-center focus:border focus:border-emerald-600 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 lg:hidden">
+            <form
+              onSubmit={handleSearch}
+              className="mb-4 flex items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 focus-within:border-emerald-600 lg:hidden"
+            >
               <input
                 type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for products, brands and more..."
-                className="  w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+                className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
                 aria-label="Search products"
               />
-              <MagnifyingGlassIcon className="size-5 text-emerald-600" />
-            </div>
+              <button type="submit" aria-label="Search">
+                <MagnifyingGlassIcon className="size-5 text-emerald-600" />
+              </button>
+            </form>
           </nav>
         </header>
 
@@ -310,13 +360,26 @@ export default function Nav() {
                   </Link>
                 ),
               )}
-              <Link
-                href="/LogIn"
-                className="flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 font-semibold text-white"
-              >
-                <UserIcon className="size-5" />
-                Sign In
-              </Link>
+               {session.status === "authenticated" ? (
+                  <>
+                    <button
+                      onClick={Logouthandler}
+                      className="hidden items-center gap-2 rounded-full bg-red-600 px-5 py-3 text-sm font-semibold text-white hover:bg-red-700 sm:flex"
+                    >
+                      Log Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/LogIn"
+                      className="hidden items-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 sm:flex"
+                    >
+                      <UserIcon className="size-4" />
+                       Sign In
+                    </Link>
+                  </>
+                )}    
             </div>
           </DialogPanel>
         </Dialog>

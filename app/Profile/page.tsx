@@ -1,9 +1,5 @@
-import React from 'react'
+import ProfileComp from "../_component/ProfileComp/ProfileComp";
 
-export default function page() {
-  return (
-    <div>
-      
-    </div>
-  )
+export default function ProfilePage() {
+  return <ProfileComp />;
 }

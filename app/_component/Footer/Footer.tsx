@@ -15,7 +15,7 @@ const footerLinks = {
   ],
   Account: [
     { name: "My Account", href: "/profile" },
-    { name: "Order History", href: "/orders" },
+    { name: "All Orders", href: "/allorders" },
     { name: "Wishlist", href: "/wishlist" },
     { name: "Shopping Cart", href: "/cart" },
   ],

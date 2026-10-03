@@ -6,6 +6,7 @@ const pathProtected = [
   "/checkout",
   "/profile",
   "/orders",
+  "/allorders",
   "/wishlist",
   "/address",
 ];
@@ -47,6 +48,7 @@ export const config = {
     "/checkout/:path*",
     "/profile/:path*",
     "/orders/:path*",
+    "/allorders/:path*",
     "/wishlist/:path*",
     "/address/:path*",
     "/LogIn",

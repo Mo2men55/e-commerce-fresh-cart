@@ -31,13 +31,16 @@ export default function ShopByCategory({
             href={`/products?category=${category._id}`}
             className="group flex flex-col items-center gap-3 text-center"
           >
+            <div>
+              
+            </div>
             <span className="relative flex size-24 items-center justify-center overflow-hidden rounded-full border border-slate-100 bg-white shadow-sm transition group-hover:border-emerald-200 group-hover:shadow-md sm:size-28">
               <Image
                 src={category.image}
                 alt={category.name}
                 fill
                 sizes="112px"
-                className="object-cover p-3 transition-transform duration-300 group-hover:scale-105"
+                className=" object-contain   group-hover:scale-105"
               />
             </span>
             <span className="text-sm font-medium text-slate-700 group-hover:text-emerald-600">
