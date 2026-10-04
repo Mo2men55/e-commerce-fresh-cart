@@ -7,8 +7,25 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { prodType } from "@/app/_interface/product";
 import ButtonAddCart from "../ButtonAddCart/ButtonAddCart";
-import { addToWishlist } from "../action/wishlistAction/wishlist";
 import { toast } from "@/components/ui/toast";
+
+async function addToWishlistRequest(productId: string) {
+  const response = await fetch("/api/wishlist", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ productId }),
+  });
+
+  if (response.status === 401) {
+    throw new Error("UNAUTHORIZED");
+  }
+
+  if (!response.ok) {
+    throw new Error("Failed to add product to wishlist");
+  }
+
+  return response.json();
+}
 
 export default function ProductCard({ product }: { product: prodType }) {
   const router = useRouter();
@@ -19,7 +36,7 @@ export default function ProductCard({ product }: { product: prodType }) {
   const rating = Math.round(product.ratingsAverage);
 
   const wishlistMutation = useMutation({
-    mutationFn: addToWishlist,
+    mutationFn: addToWishlistRequest,
     onSuccess: () => {
       toast.add({
         type: "success",
@@ -28,13 +45,22 @@ export default function ProductCard({ product }: { product: prodType }) {
       });
       queryClient.invalidateQueries({ queryKey: ["getwishlist"] });
     },
-    onError: () => {
+    onError: (error: Error) => {
+      if (error.message === "UNAUTHORIZED") {
+        toast.add({
+          type: "error",
+          title: "Failed",
+          description: "Please log in to add products to your wishlist.",
+        });
+        router.push("/LogIn");
+        return;
+      }
+
       toast.add({
         type: "error",
         title: "Failed",
-        description: "Please log in to add products to your wishlist.",
+        description: "Could not add product to wishlist. Please try again.",
       });
-      router.push("/LogIn");
     },
   });
 

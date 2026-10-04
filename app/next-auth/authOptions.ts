@@ -1,11 +1,11 @@
-import { NextAuthOptions, Session, User } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { jwtDecode } from "jwt-decode";
-import { JWT } from "next-auth/jwt";
 import { API_BASE_URL } from "../_component/Service/apiConfig";
+import { AUTH_SECRET } from "../_utilites/authSecret";
 
 export const authOption: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET ?? "dev-secret-change-me",
+  secret: AUTH_SECRET,
   session: {
     strategy: "jwt",
   },

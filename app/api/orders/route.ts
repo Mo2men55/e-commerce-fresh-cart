@@ -1,11 +1,12 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
+import { AUTH_SECRET } from "@/app/_utilites/authSecret";
 
 export async function GET(req: NextRequest) {
   const token = await getToken({
     req,
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: AUTH_SECRET,
   });
 
   if (!token?.token) {

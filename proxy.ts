@@ -1,5 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { AUTH_SECRET } from "@/app/_utilites/authSecret";
 
 const pathProtected = [
   "/cart",
@@ -16,7 +17,7 @@ const pathUnprotected = ["/login", "/signup", "/forgetpass"];
 export async function proxy(req: NextRequest) {
   const token = await getToken({
     req,
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: AUTH_SECRET,
   });
   const isAuthenticated = Boolean(token);
   const pathname = req.nextUrl.pathname.toLowerCase();
