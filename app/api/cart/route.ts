@@ -1,13 +1,9 @@
-import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import { AUTH_SECRET } from "@/app/_utilites/authSecret";
+import { readSessionJwt } from "@/app/_utilites/sessionJwt";
 import { API_BASE_URL } from "@/app/_component/Service/apiConfig";
 
 async function getAccessToken(req: NextRequest) {
-  const token = await getToken({
-    req,
-    secret: AUTH_SECRET,
-  });
+  const token = await readSessionJwt(req);
   return token?.token as string | undefined;
 }
 

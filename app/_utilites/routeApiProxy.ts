@@ -1,12 +1,10 @@
-import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import { AUTH_SECRET } from "./authSecret";
+import { readAccessToken } from "./sessionJwt";
 import { API_BASE_URL } from "@/app/_component/Service/apiConfig";
 import type { ReviewInput } from "@/app/types/review";
 
 export async function getAccessToken(req: NextRequest) {
-  const token = await getToken({ req, secret: AUTH_SECRET });
-  return token?.token as string | undefined;
+  return readAccessToken(req);
 }
 
 export function jsonError(message: string, status: number) {

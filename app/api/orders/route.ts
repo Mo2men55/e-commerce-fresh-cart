@@ -1,13 +1,9 @@
-import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
-import { AUTH_SECRET } from "@/app/_utilites/authSecret";
+import { readSessionJwt } from "@/app/_utilites/sessionJwt";
 
 export async function GET(req: NextRequest) {
-  const token = await getToken({
-    req,
-    secret: AUTH_SECRET,
-  });
+  const token = await readSessionJwt(req);
 
   if (!token?.token) {
     return NextResponse.json(
