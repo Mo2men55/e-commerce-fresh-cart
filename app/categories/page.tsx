@@ -45,7 +45,7 @@ export default async function CategoriesPage() {
             {categories.map((category) => (
               <Link
                 key={category._id}
-                href={`/products?category=${category._id}`}
+                href={`/categories/${category._id}`}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
               >
                 <div className="relative aspect-square bg-slate-50">

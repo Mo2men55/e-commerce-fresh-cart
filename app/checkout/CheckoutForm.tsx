@@ -70,7 +70,7 @@ export default function CheckoutForm({ cartId }: { cartId: string }) {
     },
   });
 
-  // TODO: point this at your own addresses route. Fails quietly -> empty list.
+  // Saved addresses from /api/addresses (managed on /address). Fails quietly -> empty list.
   const { data: savedAddresses = [], isLoading: isAddressesLoading } = useQuery<SavedAddress[]>({
     queryKey: ["addresses"],
     queryFn: async () => {

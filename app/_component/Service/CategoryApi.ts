@@ -11,3 +11,13 @@ export async function getAllCategories(): Promise<Category[]> {
   const data = await res.json()
   return data.data
 }
+
+
+export async function getCategoryById(id: string): Promise<Category | null> {
+  const res = await fetch(`${API_BASE_URL}/api/v1/categories/${encodeURIComponent(id)}`, {
+    next: { revalidate: 3600 },
+  })
+  if (!res.ok) return null
+  const data = await res.json()
+  return data.data ?? null
+}

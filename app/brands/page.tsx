@@ -45,7 +45,7 @@ export default async function BrandsPage() {
             {brands.map((brand) => (
               <Link
                 key={brand._id}
-                href={`/products?brand=${brand._id}`}
+                href={`/brands/${brand._id}`}
                 className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-md"
               >
                 <div className="relative h-16 w-full sm:h-20">

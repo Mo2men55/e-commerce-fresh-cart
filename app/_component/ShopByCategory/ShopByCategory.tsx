@@ -28,7 +28,7 @@ export default function ShopByCategory({
         {categories.map((category) => (
           <Link
             key={category._id}
-            href={`/products?category=${category._id}`}
+            href={`/categories/${category._id}`}
             className="group flex flex-col items-center gap-3 text-center"
           >
             <div>

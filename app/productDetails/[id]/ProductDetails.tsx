@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/outline"
 import { prodType } from "@/app/_interface/product"
 import ButtonAddCart from "@/app/_component/ButtonAddCart/ButtonAddCart"
+import ProductReviews from "@/app/_component/ProductReviews/ProductReviews"
 
 
 export default function ProductDetails({ product }: { product: prodType }) {
@@ -46,7 +47,7 @@ export default function ProductDetails({ product }: { product: prodType }) {
             <h1 className="mt-2 text-3xl font-bold text-slate-900">{product.title}</h1>
             <div className="mt-3 flex items-center gap-2">
               <span className="text-xl tracking-wide text-amber-400">{"★".repeat(rating)}{"☆".repeat(5 - rating)}</span>
-              <span className="text-sm text-slate-600">{product.ratingsAverage} ({product.ratingsQuantity} reviews)</span>
+              <a href="#reviews" className="text-sm text-slate-600 hover:text-emerald-700 hover:underline">{product.ratingsAverage} ({product.ratingsQuantity} reviews)</a>
             </div>
             <div className="mt-4 flex items-baseline gap-3">
               <span className="text-3xl font-bold text-slate-900">{unitPrice} EGP</span>
@@ -89,6 +90,8 @@ export default function ProductDetails({ product }: { product: prodType }) {
           </section>
         </div>
       </div>
+
+      <ProductReviews productId={product._id} />
     </main>
   )
 }

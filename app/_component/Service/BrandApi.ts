@@ -2,7 +2,7 @@ import type { Brand } from "@/app/_interface/product";
 import { API_BASE_URL } from "./apiConfig";
 
 export async function getAllBrands(): Promise<Brand[]> {
-  const res = await fetch(`${API_BASE_URL}/api/v1/brands?limit=50`, {
+  const res = await fetch(`${API_BASE_URL}/api/v1/brands?limit=100`, {
     method: "GET",
   });
 
@@ -12,4 +12,14 @@ export async function getAllBrands(): Promise<Brand[]> {
 
   const data = await res.json();
   return data.data;
+}
+
+export async function getBrandById(id: string): Promise<Brand | null> {
+  const res = await fetch(
+    `${API_BASE_URL}/api/v1/brands/${encodeURIComponent(id)}`,
+    { next: { revalidate: 3600 } },
+  );
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.data ?? null;
 }

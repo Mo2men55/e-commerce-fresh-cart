@@ -3,7 +3,6 @@
 import { FormEvent, useState } from "react";
 import {
   Bars3Icon,
-  ChevronDownIcon,
   EnvelopeIcon,
   GiftIcon,
   HeartIcon,
@@ -26,6 +25,7 @@ import { signOut, useSession } from "next-auth/react";
 import { CartResponseType } from "@/app/types/getcart";
 import { WishlistResponseType } from "@/app/types/wishlist";
 import { useQuery } from "@tanstack/react-query";
+import { CategoriesAccordion, CategoriesMegaMenu } from "./CategoriesMenu";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -34,22 +34,11 @@ const navigation = [
   { name: "Brands", href: "/brands" },
 ];
 
-const categories = [
-  { name: "All Categories", href: "/categories" },
-  { name: "Music", href: "/music" },
-  { name: "Men's Fashion", href: "/menfashion" },
-  { name: "Women's Fashion", href: "/womenfashion" },
-  { name: "Super Market", href: "/supermarket" },
-  { name: "Mobiles", href: "/mobile" },
-  { name: "Books", href: "/book" },
-  { name: "Home", href: "/home" },
-];
 
 export default function Nav() {
   const session = useSession();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { data: cartdata } = useQuery<CartResponseType>({
     queryKey: ["getcart"],
@@ -176,34 +165,7 @@ export default function Nav() {
               <div className="hidden items-center gap-7 lg:flex">
                 {navigation.map((item) =>
                   item.hasDropdown ? (
-                    <div key={item.name} className="relative">
-                      <button
-                        type="button"
-                        onClick={() => setCategoriesOpen((isOpen) => !isOpen)}
-                        className="flex items-center gap-1 text-sm font-medium hover:text-emerald-600"
-                        aria-expanded={categoriesOpen}
-                        aria-haspopup="true"
-                      >
-                        {item.name}
-                        <ChevronDownIcon
-                          className={`size-4 transition-transform ${categoriesOpen ? "rotate-180" : ""}`}
-                        />
-                      </button>
-                      {categoriesOpen && (
-                        <div className="absolute right-0 top-full z-30 mt-4 w-48 overflow-hidden rounded-xl bg-white py-2 shadow-lg ring-1 ring-slate-100">
-                          {categories.map((category) => (
-                            <Link
-                              key={category.name}
-                              href={category.href}
-                              onClick={() => setCategoriesOpen(false)}
-                              className="block px-4 py-3 text-sm hover:bg-emerald-50 hover:text-emerald-600"
-                            >
-                              {category.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    <CategoriesMegaMenu key={item.name} label={item.name} />
                   ) : (
                     <Link
                       key={item.name}
@@ -334,28 +296,7 @@ export default function Nav() {
             <div className="flex flex-col gap-6">
               {navigation.map((item) =>
                 item.hasDropdown ? (
-                  <div key={item.name}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className="flex items-center justify-between text-base font-medium"
-                    >
-                      {item.name}
-                      <ChevronDownIcon className="size-4" />
-                    </Link>
-                    <div className="mt-4 space-y-3 border-l border-slate-200 pl-4">
-                      {categories.map((category) => (
-                        <Link
-                          key={category.name}
-                          href={category.href}
-                          onClick={() => setOpen(false)}
-                          className="block text-sm text-slate-500 hover:text-emerald-600"
-                        >
-                          {category.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
+                  <CategoriesAccordion key={item.name} label={item.name} onNavigate={() => setOpen(false)} />
                 ) : (
                   <Link
                     key={item.name}

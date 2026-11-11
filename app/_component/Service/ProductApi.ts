@@ -7,6 +7,7 @@ export type ProductFilters = {
   keyword?: string;
   category?: string | string[];
   brand?: string | string[];
+  subcategory?: string;
   minPrice?: string | number;
   maxPrice?: string | number;
   sort?: string;
@@ -54,6 +55,9 @@ export function buildProductsQuery(filters: ProductFilters = {}) {
 
   appendListParam(params, "category[in]", filters.category);
   appendListParam(params, "brand", filters.brand);
+  if (filters.subcategory) {
+    params.set("subcategory", filters.subcategory);
+  }
 
   if (filters.minPrice !== undefined && filters.minPrice !== "") {
     params.set("price[gte]", String(filters.minPrice));
